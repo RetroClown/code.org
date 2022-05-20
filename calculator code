@@ -1,0 +1,105 @@
+onEvent("addButton", "click", function(){
+  setText("outputLabel", calculate(" + "));
+});
+
+onEvent("minusButton", "click", function(){
+  setText("outputLabel", calculate(" - "));
+});
+
+onEvent("multiplyButton", "click", function(){
+  setText("outputLabel", calculate(" * "));
+});
+
+onEvent("divideButton", "click", function(){
+  setText("outputLabel", calculate (" / "));
+});
+
+onEvent("sqrtButton1", "click", function(){
+  setText("outputLabel", calculate(" √x "));
+});
+
+onEvent("sqrtButton2", "click", function(){
+  setText("outputLabel", calculate(" √y " ));
+});
+
+onEvent("squareButton1", "click", function(){
+  setText("outputLabel", calculate(" x² "));
+});
+
+onEvent("squareButton2", "click", function(){
+  setText("outputLabel", calculate(" y² "));
+});
+
+//calculates the probability of which number will end up in the first and the second box
+//numbers split between boxes must add together to equal the number input in the flipNum box
+
+var one = 0;
+var two = 0;
+var totalTries = 0;
+
+onEvent("calc", "click", function() {
+  one = 0;
+  two = 0;
+  totalTries = getNumber("flipNum");
+
+  for (var j = 0; j < totalTries; j++) {
+    var attempt = randomNumber(0, 1);
+    if(attempt == 0){
+      // Increase the top number by 1
+      one++;
+    } else {
+      // Increase the bottom number by 1
+      two++;
+    }
+  }
+  updateScreen();
+});
+
+function updateScreen(){
+  setText("numberOne", one);
+  setText("numberTwo", two);
+}
+
+// calculates the answer to the math problem 
+// displays whether the answer is even or odd
+// symbol {string} - the operator
+// return {string}
+
+function calculate(symbol){
+  var number1 = getNumber("inputNumber1");
+  var number2 = getNumber("inputNumber2");
+  var answer;
+  
+  if(symbol == " + "){
+    answer = number1 + number2;
+  } else if (symbol == " - "){
+    answer = number1 - number2;
+  } else if ((symbol == " / ")) {
+    answer = number1 / number2;
+  } else if ((symbol == " x² ")) {
+    answer = number1 * number1;
+  } else if ((symbol == " y² ")) {
+    answer = number2 * number2;
+  } else if ((symbol == " √x ")) {
+    answer = Math.sqrt(number1);
+  } else if ((symbol == " √y ")) {
+    answer = Math.sqrt(number2);
+  } else {
+    answer = number1 * number2;
+  }
+  
+  // the MOD operator "%" - divides two numbers and returns the remainder
+  // in this case - if a number divide by two has a remainder of zero, it's an even number
+  if(answer%2==0){
+    setText("evenOddLabel", "The answer is an EVEN number.");
+  } else {
+    setText("evenOddLabel", "The answer is an ODD number");
+  }
+  
+  // answer is now set to a string of the math problem written out
+  answer = number1 + " " + symbol + " " + number2 + " = " + answer;
+  
+  setText("inputNumber1", "");
+  setText("inputNumber2", "");
+  return answer;
+}
